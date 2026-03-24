@@ -1,0 +1,62 @@
+﻿🤖 Robô Tupiniquim I
+📌 Especificação
+
+A Agência Espacial Brasileira (AEB) contratou a Academia do Programador para desenvolver o software de navegação do Robô Tupiniquim I, que realizará análises em Marte.
+
+O robô explora uma área retangular representada por um grid (plano cartesiano).
+
+⚙️ Sobre o Sistema
+📍 Posição e Orientação
+
+O robô é definido por:
+
+Coordenadas: (X, Y)
+Direção:
+N → Norte
+S → Sul
+L → Leste
+O → Oeste
+🎮 Comandos
+
+A AEB envia uma sequência de comandos:
+
+E (Esquerda) → gira 90° para a esquerda
+D (Direita) → gira 90° para a direita
+M (Mover) → avança 1 posição no grid (na direção atual)
+🔄 Funcionamento
+
+O programa recebe:
+
+1. Posição inicial
+
+Formato:
+
+X Y Direção
+
+Exemplo:
+
+1 2 N
+2. Sequência de comandos
+
+String contendo:
+
+E, D, M
+
+Exemplo:
+
+EMEMEMEMM
+✅ Saída Esperada
+
+Após executar todos os comandos, o programa deve retornar:
+
+Posição final: X Y Direção
+💡 Exemplo Completo
+
+Entrada:
+
+Posição inicial: 1 2 N
+Comandos: EMEMEMEMM
+
+Saída:
+
+Posição final: 1 3 N
