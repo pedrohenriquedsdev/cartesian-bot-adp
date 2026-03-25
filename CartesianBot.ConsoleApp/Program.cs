@@ -1,51 +1,105 @@
-﻿namespace CartesianBot.ConsoleApp;
-
-class Program
+﻿namespace RoboTupiniquim
 {
-    static void Main(string[] args)
+    class Program
     {
-        // Posição e Orientação: A posição do robô é dada por coordenadas(X, Y) e uma
-        // letra que representa a direção para onde ele está olhando(Norte, Sul, Leste, Oeste).
-        int x = 3;
-        int y = 3;
-        char direcao = 'L';
+        static int largura = 5;
+        static int altura = 5;
 
-        //A AEB envia strings de comando simples(E, D, M):
-        Console.Write("Envie os comandos de direção e avanço: ");
-        string comandos = Console.ReadLine()!.ToUpper();
-
-        //Verificação das direções e dos comandos
-        for (int i = 0; i < comandos.Length; i++)
+        static void Main(string[] args)
         {
-            char comando = comandos[i];
+            Console.Write("Digite a posição inicial (X Y Direção): ");
+            string[] entrada = Console.ReadLine()!.Split(' ');
 
-            if (comando == 'D')
+            int x = int.Parse(entrada[0]);
+            int y = int.Parse(entrada[1]);
+            char direcao = char.Parse(entrada[2].ToUpper());
+
+            Console.Write("Digite os comandos: ");
+            string comandos = Console.ReadLine()!.ToUpper();
+
+            foreach (char comando in comandos)
             {
-                if (direcao == 'N') direcao = 'L';
-                else if (direcao == 'L') direcao = 'S';
-                else if (direcao == 'S') direcao = 'O';
-                else if (direcao == 'O') direcao = 'N';
+                Console.Clear();
+
+                switch (comando)
+                {
+                    case 'E':
+                        direcao = GirarEsquerda(direcao);
+                        break;
+
+                    case 'D':
+                        direcao = GirarDireita(direcao);
+                        break;
+
+                    case 'M':
+                        Mover(ref x, ref y, direcao);
+                        break;
+                }
+
+                DesenharGrid(x, y, direcao);
+                Thread.Sleep(500); // animação
             }
 
-            else if (comando == 'E')
-            {
-                if (direcao == 'N') direcao = 'O';
-                else if (direcao == 'O') direcao = 'S';
-                else if (direcao == 'S') direcao = 'L';
-                else if (direcao == 'L') direcao = 'N';
-            }
+            Console.WriteLine($"\nFinal: {x} {y} {direcao}");
+        }
 
-            else if (comando == 'M')
+        static void DesenharGrid(int roboX, int roboY, char direcao)
+        {
+            for (int y = altura - 1; y >= 0; y--)
             {
-                if (direcao == 'N') y++;
-                else if (direcao == 'S') y--;
-                else if (direcao == 'L') x++;
-                else if (direcao == 'O') x--;
+                for (int x = 0; x < largura; x++)
+                {
+                    if (x == roboX && y == roboY)
+                        Console.Write(GetRoboChar(direcao) + " ");
+                    else
+                        Console.Write(". ");
+                }
+                Console.WriteLine();
             }
         }
 
-        Console.WriteLine($"Posicão Final do User: {x} {y} {direcao}");
+        static char GetRoboChar(char direcao)
+        {
+            return direcao switch
+            {
+                'N' => '^',
+                'S' => 'v',
+                'L' => '>',
+                'O' => '<',
+                _ => '?'
+            };
+        }
 
+        static char GirarEsquerda(char d) => d switch
+        {
+            'N' => 'O',
+            'O' => 'S',
+            'S' => 'L',
+            'L' => 'N',
+            _ => d
+        };
 
+        static char GirarDireita(char d) => d switch
+        {
+            'N' => 'L',
+            'L' => 'S',
+            'S' => 'O',
+            'O' => 'N',
+            _ => d
+        };
+
+        static void Mover(ref int x, ref int y, char d)
+        {
+            switch (d)
+            {
+                case 'N': y++; break;
+                case 'S': y--; break;
+                case 'L': x++; break;
+                case 'O': x--; break;
+            }
+
+            x = Math.Clamp(x, 0, largura - 1);
+            y = Math.Clamp(y, 0, altura - 1);
+        }
     }
 }
